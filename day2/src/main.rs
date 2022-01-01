@@ -1,11 +1,11 @@
 use anyhow::Result;
-use day1::load;
+use day2::load;
 use log::info;
 
 fn main() -> Result<()> {
     env_logger::init();
 
-    let mut solution = load("input.day1.full")?;
+    let mut solution = load("input.day2.full")?;
     info!(
         "{} {}: {:?}",
         emojis::lookup("christmas_tree")
