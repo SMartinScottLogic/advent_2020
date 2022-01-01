@@ -1,7 +1,7 @@
-use anyhow::{Result, Context};
+use anyhow::Context;
+use std::collections::HashSet;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use std::collections::HashSet;
 
 pub fn load(filename: &str) -> anyhow::Result<Solution> {
     let file = File::open(filename).context(format!("loading '{}'", filename))?;
