@@ -1,10 +1,11 @@
+use anyhow::Context;
 use std::cmp::max;
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
 pub fn load(filename: &str) -> anyhow::Result<Solution> {
-    let file = File::open(filename)?;
+    let file = File::open(filename).context(format!("loading '{}'", filename))?;
 
     let mut solution = Solution::default();
     let reader = BufReader::new(file);
