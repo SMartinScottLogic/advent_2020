@@ -12,25 +12,21 @@ lazy_static! {
         m.insert("byr", regex::Regex::new(r"^(?P<value>[0-9]{4})$").unwrap());
         m.insert("iyr", regex::Regex::new(r"^(?P<value>[0-9]{4})$").unwrap());
         m.insert("eyr", regex::Regex::new(r"^(?P<value>[0-9]{4})$").unwrap());
-        m.insert("hgt", regex::Regex::new(r"^(?P<value>[0-9]{2,3})(?P<unit>cm|in)$").unwrap());
-        m.insert("hcl", regex::Regex::new(r"^#(?P<value>[0-9a-f]{6})$").unwrap());
-        m.insert("ecl", regex::Regex::new(r"^(?P<value>amb|blu|brn|gry|grn|hzl|oth)$").unwrap());
+        m.insert(
+            "hgt",
+            regex::Regex::new(r"^(?P<value>[0-9]{2,3})(?P<unit>cm|in)$").unwrap(),
+        );
+        m.insert(
+            "hcl",
+            regex::Regex::new(r"^#(?P<value>[0-9a-f]{6})$").unwrap(),
+        );
+        m.insert(
+            "ecl",
+            regex::Regex::new(r"^(?P<value>amb|blu|brn|gry|grn|hzl|oth)$").unwrap(),
+        );
         m.insert("pid", regex::Regex::new(r"^(?P<value>[0-9]{9})$").unwrap());
         m
-};
-/*
-    static ref REQUIRED_PASSPORT_FIELDS: Vec<(&'static str, regex::Regex)> =
-        vec![
-            ("byr", regex::Regex::new(r"^(?P<value>[0-9]{4})$").unwrap()),
-            ("iyr", regex::Regex::new(r"^(?P<value>[0-9]{4})$").unwrap()),
-            ("eyr", regex::Regex::new(r"^(?P<value>[0-9]{4})$").unwrap()),
-            ("hgt", regex::Regex::new(r"^(?P<value>[0-9]{2-3})(?P<unit>cm|in)$").unwrap()),
-            ("hcl", regex::Regex::new(r"^#(?P<value>[0-9a-f]{6})$").unwrap()),
-            ("ecl", regex::Regex::new(r"^(?P<value>amb|blu|brn|gry|grn|hzl|oth)$").unwrap()),
-            ("pid", regex::Regex::new(r"^(?P<value>[0-9]{9})$").unwrap()),
-        //"cid"
-        ];
-        */
+    };
 }
 
 pub fn load(filename: &str) -> anyhow::Result<Solution> {
