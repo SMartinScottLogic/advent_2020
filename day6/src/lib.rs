@@ -84,9 +84,6 @@ impl Solution {
 
 #[cfg(test)]
 mod tests {
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
-    use super::*;
-
     #[ctor::ctor]
     fn init() {
         env_logger::init();
