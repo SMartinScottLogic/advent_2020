@@ -34,6 +34,15 @@ impl Solution {
 
     pub fn analyse(&mut self) {
         self.answer_part1 = self.analyse_part1();
+        self.answer_part2 = self.analyse_part2();
+    }
+
+    pub fn answer_part1(&self) -> Option<i64> {
+        self.answer_part1
+    }
+
+    pub fn answer_part2(&self) -> Option<i64> {
+        self.answer_part2
     }
 
     fn analyse_part1(&self) -> Option<i64> {
@@ -68,12 +77,47 @@ impl Solution {
         debug!("({}, {}) {}", x, y, orientation);
         Some(x.abs() + y.abs())
     }
-    pub fn answer_part1(&self) -> Option<i64> {
-        self.answer_part1
-    }
 
-    pub fn answer_part2(&self) -> Option<i64> {
-        self.answer_part2
+    fn analyse_part2(&self) -> Option<i64> {
+        use Instruction::*;
+
+        let mut waypoint_x = 10_i64;
+        let mut waypoint_y = 1_i64;
+        let mut x = 0_i64;
+        let mut y = 0_i64;
+
+        for instruction in &self.instructions {
+            match instruction {
+                North(d) => waypoint_y += *d as i64,
+                South(d) => waypoint_y -= *d as i64,
+                East(d) => waypoint_x += *d as i64,
+                West(d) => waypoint_x -= *d as i64,
+                Left(d) => {
+                    let mut d = *d;
+                    while d > 0 {
+                        let t = waypoint_x;
+                        waypoint_x = -waypoint_y;
+                        waypoint_y = t;
+                        d -= 90;
+                    }
+                }
+                Right(d) => {
+                    let mut d = *d;
+                    while d > 0 {
+                        let t = waypoint_x;
+                        waypoint_x = waypoint_y;
+                        waypoint_y = -t;
+                        d -= 90;
+                    }
+                }
+                Forward(d) => {
+                    x += (*d as i64) * waypoint_x;
+                    y += (*d as i64) * waypoint_y;
+                }
+            }
+        }
+        debug!("({}, {}) ({}, {})", x, y, waypoint_x, waypoint_y);
+        Some(x.abs() + y.abs())
     }
 }
 
