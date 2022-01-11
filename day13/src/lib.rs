@@ -1,6 +1,6 @@
+use log::debug;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use log::debug;
 
 pub fn load(filename: &str) -> anyhow::Result<Solution> {
     let file = File::open(filename)?;
@@ -15,7 +15,10 @@ pub fn load(filename: &str) -> anyhow::Result<Solution> {
     let mut line = String::new();
     reader.read_line(&mut line)?;
     debug!("'{}'", line);
-    line.trim().split(',').map(|s| s.parse::<i64>().ok()).for_each(|v| solution.add_bus(v));
+    line.trim()
+        .split(',')
+        .map(|s| s.parse::<i64>().ok())
+        .for_each(|v| solution.add_bus(v));
 
     Ok(solution)
 }
@@ -24,7 +27,7 @@ pub fn load(filename: &str) -> anyhow::Result<Solution> {
 pub struct Solution {
     answer_part1: Option<i64>,
     answer_part2: Option<i64>,
-    
+
     earliest_departure: i64,
     buses: Vec<Option<i64>>,
 }
@@ -63,8 +66,8 @@ impl Solution {
             let wait = departure - self.earliest_departure;
             debug!("{} {} vs {}", bus, wait, self.earliest_departure);
             match best {
-                    Some((_b, w)) if w <= wait => {},
-                    _ => best = Some((*bus, wait)),
+                Some((_b, w)) if w <= wait => {}
+                _ => best = Some((*bus, wait)),
             }
         }
         debug!("{:?}", best);
@@ -72,6 +75,39 @@ impl Solution {
     }
 
     fn analyse_part2(&self) -> Option<i64> {
-        None
+        let mut t = 0_i64;
+        loop {
+            let (complete, next_increment) = self.part(0, t);
+
+            if complete {
+                break;
+            }
+            t += next_increment;
+            debug!("t: {}", t);
+        }
+        debug!("Complete @ {}", t);
+        Some(t)
+    }
+
+    fn part(&self, bus_idx: usize, t: i64) -> (bool, i64) {
+        match &self.buses.get(bus_idx) {
+            None => (true, 0),
+            Some(bus) => match bus {
+                Some(bus) => {
+                    if t >= (bus_idx as i64) && (t + bus_idx as i64) % bus == 0 {
+                        debug!("match bus {} = {}", bus_idx, bus);
+                        let r = self.part(bus_idx + 1, t);
+                        match r {
+                            (true, _) => r,
+                            (false, v) => (false, v * bus),
+                        }
+                    } else {
+                        debug!("miss {} {}", bus_idx, bus);
+                        (false, 1)
+                    }
+                }
+                None => self.part(bus_idx + 1, t),
+            },
+        }
     }
 }
