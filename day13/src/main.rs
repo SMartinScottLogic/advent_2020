@@ -1,6 +1,6 @@
 use anyhow::Result;
-use log::info;
 use day13::load;
+use log::info;
 
 fn main() -> Result<()> {
     env_logger::init();
