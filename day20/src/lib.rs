@@ -30,6 +30,8 @@ pub fn load(filename: &str) -> anyhow::Result<Solution> {
 
 #[derive(Debug, Default)]
 pub struct Solution {
+    answer_part1: i64,
+    answer_part2: i64,
     tiles: HashMap<i64, Vec<String>>,
 }
 
@@ -39,37 +41,41 @@ impl Solution {
         self.tiles.entry(cur_tile).or_default().push(line);
     }
 
-    pub fn analyse(&mut self) {}
-
-    pub fn answer_part1(&self) -> Option<i64> {
-        let mut edges: HashMap<String, Vec<i64>> = HashMap::new();
+    pub fn analyse(&mut self) {
+        let mut tile_edges: HashMap<String, Vec<i64>> = HashMap::new();
 
         for (tile_id, tile) in &self.tiles {
             let [top, bottom, left, right] = get_edges(tile);
-            edges.entry(top).or_default().push(*tile_id);
-            edges.entry(bottom).or_default().push(*tile_id);
-            edges.entry(left).or_default().push(*tile_id);
-            edges.entry(right).or_default().push(*tile_id);
+            tile_edges.entry(top).or_default().push(*tile_id);
+            tile_edges.entry(bottom).or_default().push(*tile_id);
+            tile_edges.entry(left).or_default().push(*tile_id);
+            tile_edges.entry(right).or_default().push(*tile_id);
         }
-        info!("edges: {:?}", edges);
-        let edges = edges
+        info!("tile_edges: {:?}", tile_edges);
+        let edges =
+            tile_edges
+                .iter()
+                .fold(HashMap::<i64, usize>::new(), |mut acc, (_edge, ids)| {
+                    if ids.len() == 1 {
+                        *acc.entry(ids[0]).or_default() += 1;
+                    }
+                    acc
+                });
+        info!("edges? {:?}", edges);
+        let corners: Vec<_> = edges
             .iter()
-            .fold(HashMap::<i64, usize>::new(), |mut acc, (_edge, ids)| {
-                if ids.len() == 1 {
-                    *acc.entry(ids[0]).or_default() += 1;
-                }
-                acc
-            });
-        info!("corners? {:?}", edges);
-        let r = edges.iter().fold((1, 0), |mut acc, (id, c)| {
-            if *c == 2 {
-                acc.0 *= id;
-                acc.1 += 1;
-            }
-            acc
-        });
-        assert_eq!(r.1, 4);
-        Some(r.0)
+            .filter_map(|(id, c)| match c {
+                &2 => Some(id),
+                _ => None,
+            })
+            .collect();
+        info!("corners {:?}", corners);
+        assert_eq!(4, corners.len());
+        self.answer_part1 = corners.iter().fold(1, |acc, v| acc * **v);
+    }
+
+    pub fn answer_part1(&self) -> Option<i64> {
+        Some(self.answer_part1)
     }
 
     pub fn answer_part2(&self) -> Option<i64> {
