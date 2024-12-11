@@ -72,7 +72,7 @@ impl CalculationPart1 {
 
     fn value(&self) -> Option<i64> {
         match self.calc.len() {
-            1 => self.calc.get(0).and_then(|v| match v {
+            1 => self.calc.first().and_then(|v| match v {
                 AlgorithmicObject::Value(v) => Some(*v),
                 _ => None,
             }),
@@ -165,7 +165,7 @@ impl CalculationPart2 {
         debug!("next: {:?}", next);
         let calc = next;
         match calc.len() {
-            1 => calc.get(0).and_then(|v| match v {
+            1 => calc.first().and_then(|v| match v {
                 AlgorithmicObject::Value(v) => Some(*v),
                 _ => None,
             }),
