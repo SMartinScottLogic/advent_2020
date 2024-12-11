@@ -1,7 +1,7 @@
 use std::collections::HashMap;
+use std::fs::File;
 use std::io::BufRead;
 use std::io::BufReader;
-use std::fs::File;
 
 use nom::branch::alt;
 use nom::bytes::complete::tag;
@@ -47,13 +47,15 @@ impl Solution {
         self.messages.push(message);
     }
 
-    pub fn analyse(&mut self) {
-
-    }
+    pub fn analyse(&mut self) {}
 
     pub fn answer_part1(&self) -> Option<i64> {
         let rules = rules(self.rules.iter().cloned());
-        let answer = self.messages.iter().filter(|message| check_message(message.to_string(), &rules)).count();
+        let answer = self
+            .messages
+            .iter()
+            .filter(|message| check_message(message.to_string(), &rules))
+            .count();
         Some(answer as i64)
     }
 
@@ -62,7 +64,11 @@ impl Solution {
         part2_rules.push("8: 42 | 42 8".to_string());
         part2_rules.push("11: 42 31 | 42 11 31".to_string());
         let rules = rules(part2_rules.iter().cloned());
-        let answer = self.messages.iter().filter(|message| check_message(message.to_string(), &rules)).count();
+        let answer = self
+            .messages
+            .iter()
+            .filter(|message| check_message(message.to_string(), &rules))
+            .count();
         Some(answer as i64)
     }
 }
@@ -135,7 +141,6 @@ fn handle_chains(
         .flat_map(|this_chain| chain(this_chain, rules, input.clone(), indent + 1))
         .collect()
 }
-
 
 /// Takes a chain of rule indexes, if they all match, it returns the rest of the string
 /// If any fail, it returns an empty vec
@@ -217,9 +222,7 @@ pub fn rule(input: &str) -> IResult<&str, Rule> {
 }
 
 /// Parses a bunch of rules and returns their logic in order
-pub fn rules(
-    lines: impl Iterator<Item = String>,
-) -> HashMap<usize, RuleLogic> {
+pub fn rules(lines: impl Iterator<Item = String>) -> HashMap<usize, RuleLogic> {
     lines
         .map(|line| rule(line.as_str()).map(|(_rest, rule)| rule).unwrap())
         .map(|rule| (rule.number, rule.logic))

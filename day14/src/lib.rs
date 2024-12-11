@@ -135,7 +135,7 @@ impl Instruction {
                         values.push(0);
                         values.push(v);
                     } else {
-                        let mut next_values = vec![true, false]
+                        let mut next_values = [true, false]
                             .iter()
                             .flat_map(|b| {
                                 values.iter().map(move |value: &i64| match b {

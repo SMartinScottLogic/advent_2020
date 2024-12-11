@@ -86,7 +86,6 @@ impl Solution {
 impl Solution {
     fn add_passport(&mut self, passport: &str) {
         let passport = passport
-            .trim()
             .split_whitespace()
             .map(|s| {
                 let pos = s.find(':').unwrap();

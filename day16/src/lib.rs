@@ -214,9 +214,9 @@ impl FromStr for Rule {
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let pos = s.trim().find(':').unwrap();
-        let name = (&s[..pos]).to_string();
+        let name = (s[..pos]).to_string();
 
-        let ranges = (&s[pos + 1..])
+        let ranges = (s[pos + 1..])
             .trim()
             .split(" or ")
             .map(|v| {
