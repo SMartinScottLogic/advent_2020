@@ -1,5 +1,5 @@
 use anyhow::Result;
-use day19::load;
+use day20::load;
 use log::info;
 
 fn main() -> Result<()> {
@@ -8,7 +8,7 @@ fn main() -> Result<()> {
     for emoji in emojis::iter() {
         info!("{} {} {:?}", emoji.as_str(), emoji.name(), emoji.group());
     }
-    let mut solution = load("input.day19.full")?;
+    let mut solution = load("input.day20.full")?;
     info!(
         "{} {}: {:?}",
         emojis::lookup("christmas_tree")
