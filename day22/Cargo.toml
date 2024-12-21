@@ -14,3 +14,6 @@ env_logger = "0.9.0"
 anyhow = "1.0.51"
 # ✨ Lookup and iterate over emoji names, shortcodes, and groups.
 emojis = "0.2.1"
+
+# Attribute macro for auto-memoizing functions with somewhat-simple signatures
+memoize = "0.4.2"
